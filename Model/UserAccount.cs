@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TestWebAPI.Model
 {
-    public class Account
+    public class UserAccount
     {
-        string User;
+        string UserName;
         string Password;
         DateTime CreateTime;
     }

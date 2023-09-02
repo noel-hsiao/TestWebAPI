@@ -9,6 +9,7 @@ namespace TestWebAPI.Model
     {
         string Title;
         string Content;
+        string CreateUser;
         bool IsDelete;
         DateTime CreateTime;
         DateTime UpdateTime;

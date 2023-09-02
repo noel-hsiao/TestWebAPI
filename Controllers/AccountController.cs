@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,33 +14,41 @@ namespace TestWebAPI.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        // GET: api/<AccountController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("{UserName}")]
+        public string Get(string userName)
         {
-            return new string[] { "value1", "value2" };
+            return userName;
+        }
+        [HttpPost("Create")]
+        public void CreateAccount([FromBody] JsonElement value)
+        {
+            JObject data = JObject.Parse(value.GetRawText());
+            Account account = new Account();
+            if(account.CreateAccount(data["UserName"].ToString(), data["Password"].ToString()))
+            {
+                Ok();
+            }
+            else
+            {
+                Problem();
+            }
         }
 
-        // GET api/<AccountController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("Login")]
+        public void Login([FromBody] JsonElement value)
         {
-            return "value";
+            JObject data = JObject.Parse(value.GetRawText());
+            Account account = new Account();
+            if (account.Login(data["UserName"].ToString(), data["Password"].ToString()))
+            {
+                Ok();
+            }
+            else
+            {
+                Problem();
+            }
         }
 
-        // POST api/<AccountController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<AccountController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<AccountController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
