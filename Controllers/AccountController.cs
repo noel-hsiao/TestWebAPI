@@ -13,16 +13,11 @@ namespace TestWebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
-    {
-        [HttpGet("{UserName}")]
-        public string Get(string userName)
-        {
-            return userName;
-        }
+    {        
         [HttpPost("Create")]
         public void CreateAccount([FromBody] JsonElement value)
         {
-            JObject data = JObject.Parse(value.GetRawText());
+            JObject data = JObject.Parse(value.GetRawText());            
             Account account = new Account();
             if(account.CreateAccount(data["UserName"].ToString(), data["Password"].ToString()))
             {
@@ -47,11 +42,6 @@ namespace TestWebAPI.Controllers
             {
                 Problem();
             }
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

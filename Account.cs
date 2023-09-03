@@ -18,6 +18,7 @@ namespace TestWebAPI
         {
             try
             {
+                
                 using (var conn = new SqlConnection(dbconn))
                 {
                     DynamicParameters param = new DynamicParameters();
@@ -40,7 +41,6 @@ namespace TestWebAPI
             catch(Exception ex)
             {
                 //TO DO handle exception
-                string test = ex.Message.ToString();
                 return false;
             }
             return true;

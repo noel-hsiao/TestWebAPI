@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 
 namespace TestWebAPI.Model
 {
-    public class ChatBoard
+    public class Chat
     {
+        int Sno;
         string Title;
-        string Content;
-        string CreateUser;
+        string ContentText;
+        string CreateUserName;
         bool IsDelete;
         DateTime CreateTime;
         DateTime UpdateTime;

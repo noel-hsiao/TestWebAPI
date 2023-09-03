@@ -1,47 +1,72 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using TestWebAPI.Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace TestWebAPI.Controllers
-{
+{    
     [Route("api/[controller]")]
     [ApiController]
     public class ChatBoardController : ControllerBase
     {
-        // GET: api/<ChatBoardController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private static ChatBoard chatBoard = new ChatBoard();
+        
+        [HttpGet("{quantity}")]
+        public string Get(int quantity)
         {
-            return new string[] { "value1", "value2" };
+            var chats = chatBoard.GetChats(quantity);
+            
+            return JsonSerializer.Serialize(chats);
         }
 
-        // GET api/<ChatBoardController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<ChatBoardController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] JsonElement value)
         {
+            JObject data = JObject.Parse(value.GetRawText());
+
+            if (chatBoard.CreateChat(data["CreateUserName"].ToString(), data["Title"].ToString(), data["ContentText"].ToString()))
+            {
+                Ok();
+            }
+            else
+            {
+                Problem();
+            }
         }
 
         // PUT api/<ChatBoardController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] JsonElement value)              
         {
+            JObject data = JObject.Parse(value.GetRawText());
+            if (chatBoard.EditChat(id, data["ContentText"].ToString()))
+            {
+                Ok();
+            }
+            else
+            {
+                Problem();
+            }
         }
 
         // DELETE api/<ChatBoardController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            if (chatBoard.DeleteChat(id))
+            {
+                Ok();
+            }
+            else
+            {
+                Problem();
+            }
         }
     }
 }
